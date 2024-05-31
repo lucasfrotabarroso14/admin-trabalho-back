@@ -1,0 +1,32 @@
+version: '3'
+services:
+  db:
+    image: mysql:8.0
+    ports:
+      - 3319:3306
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: admin
+      MYSQL_USER: docker
+      MYSQL_PASSWORD: docker
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./initial_data.sql:/docker-entrypoint-initdb.d/initial_data.sql
+
+  adminer:
+    image: adminer
+    restart: always
+    depends_on:
+      - db
+    ports:
+      - 8089:8080
+
+  redis:
+    image: redis
+    ports:
+      - 6399:6379
+    restart: always
+
+volumes:
+  mysql_data:
